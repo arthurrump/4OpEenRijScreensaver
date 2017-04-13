@@ -24,7 +24,9 @@ namespace _4OpEenRijScreensaver
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+#if !DEBUG
             App.Current.Shutdown();
+#endif
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -35,10 +37,12 @@ namespace _4OpEenRijScreensaver
         Point _mousePos;
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
+#if !DEBUG
             if (_mousePos != default(Point) && _mousePos != e.GetPosition(MainWindowWindow))
                 App.Current.Shutdown();
 
             _mousePos = e.GetPosition(MainWindowWindow);
+#endif
         }
     }
 }
