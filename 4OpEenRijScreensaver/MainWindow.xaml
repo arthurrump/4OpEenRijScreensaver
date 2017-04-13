@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_4OpEenRijScreensaver"
-        mc:Ignorable="d" x:Name="MainWindowWindow" Background="Black"
-        Title="4 Op Een Rij" ShowInTaskbar="False" Topmost="True" WindowState="Maximized" ResizeMode="NoResize" WindowStyle="None" KeyDown="Window_KeyDown" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" Cursor="None">
-    <Grid>
+        mc:Ignorable="d" x:Name="MainWindowWindow" Background="Black" Loaded="Window_Loaded"
+        Title="4 Op Een Rij" ShowInTaskbar="False" Topmost="True" ResizeMode="NoResize" KeyDown="Window_KeyDown" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" 
+        WindowStyle="None" WindowState="Maximized" Cursor="None">
+    <Grid Name="MainGrid">
         
     </Grid>
 </Window>
