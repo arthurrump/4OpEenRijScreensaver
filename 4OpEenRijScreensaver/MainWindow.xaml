@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_4OpEenRijScreensaver"
         mc:Ignorable="d" x:Name="MainWindowWindow" Background="Black" Loaded="Window_Loaded"
-        Title="4 Op Een Rij" ShowInTaskbar="False" Topmost="True" ResizeMode="NoResize" KeyDown="Window_KeyDown" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" 
-        WindowStyle="None" WindowState="Maximized" Cursor="None">
+        Title="4 Op Een Rij" ShowInTaskbar="False" ResizeMode="NoResize" KeyDown="Window_KeyDown" MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" 
+        Topmost="True" WindowStyle="None" WindowState="Maximized" Cursor="None">
     <Grid Name="MainGrid">
         
     </Grid>

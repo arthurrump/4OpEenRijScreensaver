@@ -15,6 +15,15 @@ using System.Windows.Shapes;
 
 namespace _4OpEenRijScreensaver
 {
+    enum Field
+    {
+        Empty,
+        Zero,
+        One,
+        Two,
+        Three
+    }
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -22,9 +31,16 @@ namespace _4OpEenRijScreensaver
             InitializeComponent();
         }
 
+        int _cols, _rows;
+        double _r;
+        Field[,] _board;
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            double x = MainWindowWindow.ActualWidth / 16;
+            _cols = 19; // TODO: decide based on actual screensize
+            _r = MainWindowWindow.ActualWidth / _cols;
+            _rows = (int)Math.Round(MainWindowWindow.ActualHeight / _r);
+            _board = new Field[_cols, _rows];
 
             var r = new Random();
 
@@ -44,7 +60,7 @@ namespace _4OpEenRijScreensaver
                     )
             };
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < _cols; i++)
             {
                 MainGrid.ColumnDefinitions.Add(
                     new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
@@ -56,15 +72,30 @@ namespace _4OpEenRijScreensaver
             }
 
 
-            for (int i = 0;; i++)
+            for (int i = 0; i < _cols * _rows; i++)
             {
+                int col;
+                do
+                {
+                    col = r.Next(_cols);
+                } while (_board[col, _rows - 1] != Field.Empty);
+
+                for (int j = 0; j < _rows; j++)
+                    if (_board[col, j] == Field.Empty)
+                    {
+                        _board[col, j] = (Field)(i % 4 + 1);
+                        break;
+                    }
+
                 var el = new Ellipse
                 {
                     Fill = players[i % 4],
-                    Width = x - 8.5, Height = x - 8.5, Margin = new Thickness(4)
+                    Width = _r - 8.5,
+                    Height = _r - 8.5,
+                    Margin = new Thickness(4)
                 };
 
-                ((Panel)MainGrid.Children[r.Next(16)]).Children.Insert(0, el);
+                ((Panel)MainGrid.Children[col]).Children.Insert(0, el);
 
                 await Task.Delay(1000);
             }
