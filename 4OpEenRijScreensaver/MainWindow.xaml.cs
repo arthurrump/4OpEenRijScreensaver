@@ -42,21 +42,21 @@ namespace _4OpEenRijScreensaver
             _rows = (int)Math.Round(MainWindowWindow.ActualHeight / _r);
             _board = new Field[_cols, _rows];
 
-            var r = new Random();
+            var rand = new Random();
 
             SolidColorBrush[] players =
             {
                 new SolidColorBrush(
-                        Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256))
+                        Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
                     ),
                 new SolidColorBrush(
-                        Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256))
+                        Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
                     ),
                 new SolidColorBrush(
-                        Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256))
+                        Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
                     ),
                 new SolidColorBrush(
-                        Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256))
+                        Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
                     )
             };
 
@@ -74,30 +74,54 @@ namespace _4OpEenRijScreensaver
 
             for (int i = 0; i < _cols * _rows; i++)
             {
-                int col;
-                do
-                {
-                    col = r.Next(_cols);
+                int col, row = -1;
+                Field player = (Field)(i % 4 + 1);
+
+                do {
+                    col = rand.Next(_cols);
                 } while (_board[col, _rows - 1] != Field.Empty);
 
-                for (int j = 0; j < _rows; j++)
-                    if (_board[col, j] == Field.Empty)
+                for (int r = 0; r < _rows; r++)
+                    if (_board[col, r] == Field.Empty)
                     {
-                        _board[col, j] = (Field)(i % 4 + 1);
+                        _board[col, r] = player;
+                        row = r;
                         break;
                     }
 
                 var el = new Ellipse
                 {
-                    Fill = players[i % 4],
+                    Fill = players[(int)player - 1],
                     Width = _r - 8.5,
                     Height = _r - 8.5,
                     Margin = new Thickness(4)
                 };
-
                 ((Panel)MainGrid.Children[col]).Children.Insert(0, el);
 
-                await Task.Delay(1000);
+                // Check for 4-in-a-row around new filled field
+                // Horizontal
+                for (int c = Math.Max(col - 3, 0); c <= col && c + 3 < _cols; c++)
+                    if (_board[c, row] == player && _board[c + 1, row] == player && 
+                        _board[c + 2, row] == player && _board[c + 3, row] == player)
+                        Winner(new (int, int)[] { (c, row), (c + 1, row), (c + 2, row), (c + 3, row)});
+
+                // Vertical
+                for (int r = Math.Max(row - 3, 0); r <= row && r + 3 < _rows; r++)
+                    if (_board[col, r] == player && _board[col, r + 1] == player &&
+                        _board[col, r + 2] == player && _board[col, r + 3] == player)
+                        Winner(new(int, int)[] { (col, r), (col, r + 1), (col, r + 2), (col, r + 3) });
+
+                // Diagonal L-R
+
+                // Diagonal R-L
+                
+
+                await Task.Delay(100);
+
+                void Winner((int c, int r)[] win)
+                {
+                    
+                }
             }
         }
 
