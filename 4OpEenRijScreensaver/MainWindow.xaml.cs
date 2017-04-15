@@ -77,7 +77,8 @@ namespace _4OpEenRijScreensaver
                 int col, row = -1;
                 Field player = (Field)(i % 4 + 1);
 
-                do {
+                do
+                {
                     col = rand.Next(_cols);
                 } while (_board[col, _rows - 1] != Field.Empty);
 
@@ -101,9 +102,9 @@ namespace _4OpEenRijScreensaver
                 // Check for 4-in-a-row around new filled field
                 // Horizontal
                 for (int c = Math.Max(col - 3, 0); c <= col && c + 3 < _cols; c++)
-                    if (_board[c, row] == player && _board[c + 1, row] == player && 
+                    if (_board[c, row] == player && _board[c + 1, row] == player &&
                         _board[c + 2, row] == player && _board[c + 3, row] == player)
-                        Winner(new (int, int)[] { (c, row), (c + 1, row), (c + 2, row), (c + 3, row)});
+                        Winner(new(int, int)[] { (c, row), (c + 1, row), (c + 2, row), (c + 3, row) });
 
                 // Vertical
                 for (int r = Math.Max(row - 3, 0); r <= row && r + 3 < _rows; r++)
@@ -111,10 +112,24 @@ namespace _4OpEenRijScreensaver
                         _board[col, r + 2] == player && _board[col, r + 3] == player)
                         Winner(new(int, int)[] { (col, r), (col, r + 1), (col, r + 2), (col, r + 3) });
 
-                // Diagonal L-R
+                // Diagonal Bottom-up
+                for (int d = Math.Min(col - 3, row - 3) < 0 ? -3 - Math.Min(col - 3, row - 3) : -3;
+                    d <= 0 && col + d + 3 < _cols && row + d + 3 < _rows; d++)
+                    if (_board[col + d, row + d] == player && _board[col + d + 1, row + d + 1] == player &&
+                        _board[col + d + 2, row + d + 2] == player && _board[col + d + 3, row + d + 3] == player)
+                        Winner(new(int, int)[] {
+                            (col + d, row + d), (col + d + 1, row + d + 1), (col + d + 2, row + d + 2), (col + d + 3, row + d + 3)
+                        });
 
-                // Diagonal R-L
-                
+                // Diagonal Top-down
+                for (int d = Math.Min(col - 3, _rows - 1 - (row + 3)) < 0 ? -3 - Math.Min(col - 3, _rows - 1 - (row + 3)) : -3;
+                    d <= 0 && col + d + 3 < _cols && row - d - 3 >= 0; d++)
+                    if (_board[col + d, row - d] == player && _board[col + d + 1, row - d - 1] == player &&
+                        _board[col + d + 2, row - d - 2] == player && _board[col + d + 3, row - d - 3] == player)
+                        Winner(new(int, int)[]
+                        {
+                            (col + d, row - d), (col + d + 1, row - d - 1), (col + d + 2, row - d - 2), (col + d + 3, row - d - 3)
+                        });
 
                 await Task.Delay(100);
 
