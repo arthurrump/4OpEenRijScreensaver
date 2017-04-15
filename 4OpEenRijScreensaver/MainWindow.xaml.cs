@@ -106,20 +106,20 @@ namespace _4OpEenRijScreensaver
                 for (int c = Math.Max(col - 3, 0); c <= col && c + 3 < _cols; c++)
                     if (_board[c, row] == player && _board[c + 1, row] == player &&
                         _board[c + 2, row] == player && _board[c + 3, row] == player)
-                        Winner(new(int, int)[] { (c, row), (c + 1, row), (c + 2, row), (c + 3, row) });
+                        await Winner(new(int, int)[] { (c, row), (c + 1, row), (c + 2, row), (c + 3, row) });
 
                 // Vertical
                 for (int r = Math.Max(row - 3, 0); r <= row && r + 3 < _rows; r++)
                     if (_board[col, r] == player && _board[col, r + 1] == player &&
                         _board[col, r + 2] == player && _board[col, r + 3] == player)
-                        Winner(new(int, int)[] { (col, r), (col, r + 1), (col, r + 2), (col, r + 3) });
+                        await Winner(new(int, int)[] { (col, r), (col, r + 1), (col, r + 2), (col, r + 3) });
 
                 // Diagonal Bottom-up
                 for (int d = Math.Min(col - 3, row - 3) < 0 ? -3 - Math.Min(col - 3, row - 3) : -3;
                     d <= 0 && col + d + 3 < _cols && row + d + 3 < _rows; d++)
                     if (_board[col + d, row + d] == player && _board[col + d + 1, row + d + 1] == player &&
                         _board[col + d + 2, row + d + 2] == player && _board[col + d + 3, row + d + 3] == player)
-                        Winner(new(int, int)[] {
+                        await Winner(new(int, int)[] {
                             (col + d, row + d), (col + d + 1, row + d + 1), (col + d + 2, row + d + 2), (col + d + 3, row + d + 3)
                         });
 
@@ -128,14 +128,39 @@ namespace _4OpEenRijScreensaver
                     d <= 0 && col + d + 3 < _cols && row - d - 3 >= 0; d++)
                     if (_board[col + d, row - d] == player && _board[col + d + 1, row - d - 1] == player &&
                         _board[col + d + 2, row - d - 2] == player && _board[col + d + 3, row - d - 3] == player)
-                        Winner(new(int, int)[] {
+                        await Winner(new(int, int)[] {
                             (col + d, row - d), (col + d + 1, row - d - 1), (col + d + 2, row - d - 2), (col + d + 3, row - d - 3)
                         });
 
                 await Task.Delay(250);
 
-                void Winner((int c, int r)[] win)
+                async Task Winner((int c, int r)[] win)
                 {
+                    // In _board (0,0) is the lower left corner, in the UI it's the highest ellipse in the left column
+                    for (int j = 0; j < 4; j++)
+                        win[j].r = ((Panel)MainGrid.Children[win[j].c]).Children.Count - 1 - win[j].r;
+
+                    UIElement[] ellipses =
+                    {
+                        ((Panel)MainGrid.Children[win[0].c]).Children[win[0].r],
+                        ((Panel)MainGrid.Children[win[1].c]).Children[win[1].r],
+                        ((Panel)MainGrid.Children[win[2].c]).Children[win[2].r],
+                        ((Panel)MainGrid.Children[win[3].c]).Children[win[3].r]
+                    };
+
+                    foreach (var ell in ellipses) ell.Opacity = 1;
+                    await Task.Delay(500);
+                    foreach (var ell in ellipses) ell.Opacity = 0;
+                    await Task.Delay(400);
+                    foreach (var ell in ellipses) ell.Opacity = 1;
+                    await Task.Delay(300);
+                    foreach (var ell in ellipses) ell.Opacity = 0;
+                    await Task.Delay(200);
+                    foreach (var ell in ellipses) ell.Opacity = 1;
+                    await Task.Delay(100);
+                    foreach (var ell in ellipses) ell.Opacity = 0;
+                    await Task.Delay(500);
+
                     _board = new Field[_cols, _rows];
                     i = 0;
 
