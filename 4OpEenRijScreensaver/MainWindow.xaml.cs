@@ -99,6 +99,8 @@ namespace _4OpEenRijScreensaver
                 };
                 ((Panel)MainGrid.Children[col]).Children.Insert(0, el);
 
+                await Task.Delay(250);
+
                 // Check for 4-in-a-row around new filled field
                 // Horizontal
                 for (int c = Math.Max(col - 3, 0); c <= col && c + 3 < _cols; c++)
@@ -126,16 +128,35 @@ namespace _4OpEenRijScreensaver
                     d <= 0 && col + d + 3 < _cols && row - d - 3 >= 0; d++)
                     if (_board[col + d, row - d] == player && _board[col + d + 1, row - d - 1] == player &&
                         _board[col + d + 2, row - d - 2] == player && _board[col + d + 3, row - d - 3] == player)
-                        Winner(new(int, int)[]
-                        {
+                        Winner(new(int, int)[] {
                             (col + d, row - d), (col + d + 1, row - d - 1), (col + d + 2, row - d - 2), (col + d + 3, row - d - 3)
                         });
 
-                await Task.Delay(100);
+                await Task.Delay(250);
 
                 void Winner((int c, int r)[] win)
                 {
-                    
+                    _board = new Field[_cols, _rows];
+                    i = 0;
+
+                    foreach (Panel p in MainGrid.Children)
+                        p.Children.Clear();
+
+                    players = new SolidColorBrush[]
+                    {
+                        new SolidColorBrush(
+                                Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
+                            ),
+                        new SolidColorBrush(
+                                Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
+                            ),
+                        new SolidColorBrush(
+                                Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
+                            ),
+                        new SolidColorBrush(
+                                Color.FromRgb((byte)rand.Next(256), (byte)rand.Next(256), (byte)rand.Next(256))
+                            )
+                    };
                 }
             }
         }
