@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("4OpEenRijScreensaver")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Arthur Rump")]
 [assembly: AssemblyProduct("4OpEenRijScreensaver")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © Arthur Rump 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
