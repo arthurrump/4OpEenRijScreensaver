@@ -13,18 +13,19 @@ namespace _4OpEenRijScreensaver
 
         int _cols, _rows, _playerCount;
 
-        public Game(int columns, int rows, int playerCount)
+        public Game(int playerCount)
         {
-            _cols = columns;
-            _rows = rows;
             _playerCount = playerCount;
         }
 
-        public async Task Start(Action<SolidColorBrush, int> draw, Func<(int column, int row)[], Task> blink, Action reset)
+        public async Task Start(Func<((int cols, int rows), double radius)> getBoardSize, Action<int> setup, Action<SolidColorBrush, int, double> draw, Func<(int column, int row)[], Task> blink, Action reset)
         {
             while (true)
             {
-                await Play(draw, blink);
+                double radius;
+                ((_cols, _rows), radius) = getBoardSize();
+                setup(_cols);
+                await Play((color, column) => draw(color, column, radius), blink);
                 reset();
             }
         }

@@ -24,18 +24,30 @@ namespace _4OpEenRijScreensaver
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int cols = 19; // TODO: decide based on actual screensize
-            double radius = MainWindowWindow.ActualWidth / cols;
-            int rows = (int)Math.Round(MainWindowWindow.ActualHeight / radius);
-
-            Game game = new Game(cols, rows, 4);
-
-            InitUI(cols);
-
-            await game.Start((color, column) => Draw(radius, color, column), BlinkFields, ResetUI);
+            Game game = new Game(4);
+            await game.Start(
+                DecideBoardSize, 
+                SetupUI, 
+                Draw, 
+                BlinkFields, 
+                ResetUI
+            );
         }
 
-        private void InitUI(int columns)
+        private ((int cols, int rows) size, double radius) DecideBoardSize()
+        {
+            var random = new Random();
+            double width = MainWindowWindow.ActualWidth;
+            double minR = 40, maxR = 160;
+
+            int cols = random.Next(Math.Min((int)Math.Ceiling(width / maxR), 12), (int)Math.Floor(width / minR));
+            double radius = width / cols;
+            int rows = (int)Math.Ceiling(MainWindowWindow.Height / radius);
+
+            return ((cols, rows), radius);
+        }
+
+        private void SetupUI(int columns)
         {
             for (int i = 0; i < columns; i++)
             {
@@ -49,7 +61,7 @@ namespace _4OpEenRijScreensaver
             }
         }
 
-        private void Draw(double radius, SolidColorBrush color, int column)
+        private void Draw(SolidColorBrush color, int column, double radius)
         {
             var el = new Ellipse
             {
@@ -91,8 +103,8 @@ namespace _4OpEenRijScreensaver
 
         private void ResetUI()
         {
-            foreach (Panel p in MainGrid.Children)
-                p.Children.Clear();
+            MainGrid.Children.Clear();
+            MainGrid.ColumnDefinitions.Clear();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
