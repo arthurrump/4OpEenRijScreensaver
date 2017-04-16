@@ -116,12 +116,32 @@ namespace _4OpEenRijScreensaver
         private SolidColorBrush[] GetPlayerColors(int count)
         {
             var r = new Random();
-            var result = new SolidColorBrush[count];
+            var colors = new Color[count];
 
             for (int i = 0; i < count; i++)
-                result[i] = new SolidColorBrush(Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256)));
+            {
+                Color c;
+                bool different;
 
-            return result;
+                do
+                {
+                    c = Color.FromRgb((byte)r.Next(256), (byte)r.Next(256), (byte)r.Next(256));
+
+                    different = c.Distance(Colors.Black) > 100;
+
+                    foreach (Color c2 in colors)
+                    {
+                        if (different)
+                            different = c.Distance(c2) > 100;
+                        else
+                            break;
+                    }
+                } while (!different);
+
+                colors[i] = c;
+            }
+
+            return colors.Select(color => new SolidColorBrush(color)).ToArray();
         }
     }
 }
