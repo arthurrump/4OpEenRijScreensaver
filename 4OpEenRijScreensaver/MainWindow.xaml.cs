@@ -90,15 +90,15 @@ namespace _4OpEenRijScreensaver
             foreach (var ell in ellipses) ell.Opacity = 1;
             await Task.Delay(500);
             foreach (var ell in ellipses) ell.Opacity = 0;
-            await Task.Delay(400);
+            await Task.Delay(500);
             foreach (var ell in ellipses) ell.Opacity = 1;
-            await Task.Delay(300);
+            await Task.Delay(250);
             foreach (var ell in ellipses) ell.Opacity = 0;
-            await Task.Delay(200);
+            await Task.Delay(250);
             foreach (var ell in ellipses) ell.Opacity = 1;
             await Task.Delay(100);
             foreach (var ell in ellipses) ell.Opacity = 0;
-            await Task.Delay(500);
+            await Task.Delay(100);
         }
 
         private void ResetUI()
